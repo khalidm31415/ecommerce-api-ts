@@ -1,6 +1,11 @@
 import { prop, getModelForClass, Ref } from "@typegoose/typegoose"
 import { User } from '../Model/User'
-import { Product } from '../Model/Product'
+import { ObjectId } from "mongoose"
+
+export type CartItem = {
+    productId: ObjectId,
+    quantity: number
+}
 
 export class Cart {
     public _id
@@ -8,8 +13,8 @@ export class Cart {
     @prop({ required: true, ref: User })
     public user!: Ref<User>
 
-    @prop({ ref: Product })
-    public products!: Ref<Product>[]
+    @prop({ required: true, _id: false })
+    public items!: CartItem[]
 }
 
 export const CartModel = getModelForClass(Cart)

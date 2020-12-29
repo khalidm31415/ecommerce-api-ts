@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CartModel } from "../Model/Cart";
+import { CartItem, CartModel } from "../Model/Cart";
 import { ProductModel } from "../Model/Product";
 
 export class Cart {
@@ -9,18 +9,31 @@ export class Cart {
         return res.send({ cart })
     }
 
-    public async addProduct(req: Request, res: Response) {
-        const { productId } = req.body
+    public async addItem(req: Request, res: Response) {
+        const { productId, quantity } = req.body
         let cart = await CartModel.findOne({ user: req.user }).exec()
         if (cart) {
             const product = await ProductModel.findById(productId)
             if (!product) {
                 return res.status(404).json({'message': 'Product not found'})
             } else {
-                cart.products.push(product)
+                const cartItem: CartItem = { productId: product._id, quantity }
+                cart.items.push(cartItem)
                 await cart.save()
                 return res.json(cart)
             }
+        } else {
+            return res.status(404).json({'message': 'Cart not found'})
+        }
+    }
+
+    public async update(req: Request, res: Response) {
+        const { items } = req.body
+        const cart = await CartModel.findOne({ user: req.user }).exec()
+        if (cart) {
+            cart.items = items
+            await cart.save()
+            return res.json(cart)
         } else {
             return res.status(404).json({'message': 'Cart not found'})
         }

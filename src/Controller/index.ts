@@ -15,7 +15,8 @@ export function Controller() {
     router.delete('/product/:id', authenticate, authorize, new Product().delete)
 
     router.get('/cart', authenticate, new Cart().get)
-    router.post('/cart', authenticate, new Cart().addProduct)
+    router.post('/cart', authenticate, new Cart().addItem)
+    router.patch('/cart', authenticate, new Cart().update)
 
     router.get('/auth/url', new Auth().url)
     router.get('/auth/callback', new Auth().callback)

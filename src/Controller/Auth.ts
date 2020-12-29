@@ -28,7 +28,7 @@ export class Auth {
                     name: data.name,
                     email: data.email
                 })
-                const cart = await CartModel.create({ user: user, products: [] })
+                const cart = await CartModel.create({ user: user, items: [] })
             }
             return res.json({ token: tokens.tokens.id_token, user: user })
         }

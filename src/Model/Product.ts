@@ -2,6 +2,7 @@ import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 import { User } from '../Model/User'
 
 export class Product {
+
     @prop({ required: true })
     public title!: string
 
