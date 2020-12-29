@@ -1,0 +1,1 @@
+Ecommerce API project for udemy course https://www.udemy.com/course/strong-type-programming-with-typescript/
