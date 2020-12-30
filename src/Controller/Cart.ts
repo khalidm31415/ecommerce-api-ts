@@ -17,8 +17,13 @@ export class Cart {
             if (!product) {
                 return res.status(404).json({'message': 'Product not found'})
             } else {
-                const cartItem: CartItem = { productId: product._id, quantity }
-                cart.items.push(cartItem)
+                let cartItem = cart.items.find(item => item.productId === productId)
+                if(cartItem) {
+                    cartItem.quantity += quantity
+                } else {
+                    cartItem = { productId, quantity }
+                    cart.items.push(cartItem)
+                }
                 await cart.save()
                 return res.json(cart)
             }
@@ -32,6 +37,7 @@ export class Cart {
         const cart = await CartModel.findOne({ user: req.user }).exec()
         if (cart) {
             cart.items = items
+            cart.items = cart.items.filter(item => item.quantity > 0)
             await cart.save()
             return res.json(cart)
         } else {
